@@ -1,1 +1,2 @@
-font.o: C:/Users/evank/Documents/C++/GBA/NewGame/source/fonts/font.c
+font.o: \
+ C:/Users/evank/Documents/GitHub/SqueegeAdvance/source/fonts/font.c

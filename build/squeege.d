@@ -1,2 +1,2 @@
 squeege.o: \
- C:/Users/evank/Documents/C++/GBA/NewGame/source/images/squeege.c
+ C:/Users/evank/Documents/GitHub/SqueegeAdvance/source/images/squeege.c

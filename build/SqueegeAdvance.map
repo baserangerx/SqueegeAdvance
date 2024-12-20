@@ -459,14 +459,14 @@ Linker script and memory map
  .debug_abbrev  0x00000435      0x21f C:/devkitPro/libgba/lib\libgba.a(interrupt.o)
  .debug_abbrev  0x00000654       0x14 C:/devkitPro/libgba/lib\libgba.a(InterruptDispatcher.o)
 
-.debug_line     0x00000000      0xfd8
+.debug_line     0x00000000      0xffc
  *(.debug_line)
- .debug_line    0x00000000      0x33e template.o
- .debug_line    0x0000033e      0x214 text.o
- .debug_line    0x00000552       0x5d font.o
- .debug_line    0x000005af       0x61 squeege.o
- .debug_line    0x00000610      0x950 C:/devkitPro/libgba/lib\libgba.a(interrupt.o)
- .debug_line    0x00000f60       0x78 C:/devkitPro/libgba/lib\libgba.a(InterruptDispatcher.o)
+ .debug_line    0x00000000      0x34a template.o
+ .debug_line    0x0000034a      0x220 text.o
+ .debug_line    0x0000056a       0x63 font.o
+ .debug_line    0x000005cd       0x67 squeege.o
+ .debug_line    0x00000634      0x950 C:/devkitPro/libgba/lib\libgba.a(interrupt.o)
+ .debug_line    0x00000f84       0x78 C:/devkitPro/libgba/lib\libgba.a(InterruptDispatcher.o)
 
 .debug_frame    0x00000000      0x12c
  *(.debug_frame)
@@ -474,15 +474,15 @@ Linker script and memory map
  .debug_frame   0x00000040       0x3c text.o
  .debug_frame   0x0000007c       0xb0 C:/devkitPro/libgba/lib\libgba.a(interrupt.o)
 
-.debug_str      0x00000000      0x7b1
+.debug_str      0x00000000      0x7cf
  *(.debug_str)
- .debug_str     0x00000000      0x7b1 template.o
-                                0x4ba (size before relaxing)
- .debug_str     0x000007b1      0x1da text.o
- .debug_str     0x000007b1       0xff font.o
- .debug_str     0x000007b1      0x105 squeege.o
- .debug_str     0x000007b1      0x334 C:/devkitPro/libgba/lib\libgba.a(interrupt.o)
- .debug_str     0x000007b1       0xba C:/devkitPro/libgba/lib\libgba.a(InterruptDispatcher.o)
+ .debug_str     0x00000000      0x7cf template.o
+                                0x4c6 (size before relaxing)
+ .debug_str     0x000007cf      0x1e6 text.o
+ .debug_str     0x000007cf      0x10b font.o
+ .debug_str     0x000007cf      0x111 squeege.o
+ .debug_str     0x000007cf      0x334 C:/devkitPro/libgba/lib\libgba.a(interrupt.o)
+ .debug_str     0x000007cf       0xba C:/devkitPro/libgba/lib\libgba.a(InterruptDispatcher.o)
 
 .debug_loc
  *(.debug_loc)
@@ -568,7 +568,7 @@ LOAD C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/14.2.0/../../../../arm-
 END GROUP
 LOAD C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/14.2.0/thumb/crtend.o
 LOAD C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/14.2.0/thumb/crtn.o
-OUTPUT(C:/Users/evank/Documents/C++/GBA/NewGame/NewGame.elf elf32-littlearm)
+OUTPUT(C:/Users/evank/Documents/GitHub/SqueegeAdvance/SqueegeAdvance.elf elf32-littlearm)
 LOAD linker stubs
 
 .debug_loclists
