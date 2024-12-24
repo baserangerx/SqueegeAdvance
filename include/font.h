@@ -1,5 +1,5 @@
-#ifndef FONT
-#define FONT
+#ifndef FONT_H
+#define FONT_H
 
 extern const unsigned int toncfontTiles[192];
 

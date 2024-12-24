@@ -1,11 +1,11 @@
-text.o: C:/Users/evank/Documents/GitHub/SqueegeAdvance/source/text.cpp \
- C:/devkitPro/libgba/include/gba_video.h \
- C:/devkitPro/libgba/include/gba_base.h \
- C:/devkitPro/libgba/include/gba_types.h \
- C:/devkitPro/libgba/include/gba_sprites.h \
- C:/Users/evank/Documents/GitHub/SqueegeAdvance/include/font.h
-C:/devkitPro/libgba/include/gba_video.h:
-C:/devkitPro/libgba/include/gba_base.h:
-C:/devkitPro/libgba/include/gba_types.h:
-C:/devkitPro/libgba/include/gba_sprites.h:
-C:/Users/evank/Documents/GitHub/SqueegeAdvance/include/font.h:
+text.o: /Users/jasonlandry/Documents/Evan/SqueegeAdvance/source/text.cpp \
+ /opt/devkitpro/libgba/include/gba_video.h \
+ /opt/devkitpro/libgba/include/gba_base.h \
+ /opt/devkitpro/libgba/include/gba_types.h \
+ /opt/devkitpro/libgba/include/gba_sprites.h \
+ /Users/jasonlandry/Documents/Evan/SqueegeAdvance/include/font.h
+/opt/devkitpro/libgba/include/gba_video.h:
+/opt/devkitpro/libgba/include/gba_base.h:
+/opt/devkitpro/libgba/include/gba_types.h:
+/opt/devkitpro/libgba/include/gba_sprites.h:
+/Users/jasonlandry/Documents/Evan/SqueegeAdvance/include/font.h:

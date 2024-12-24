@@ -53,10 +53,12 @@ int main(void)
 	irqSet(IRQ_VBLANK, VBlankHandler); // Calls VBlankHandler during VBLANK
     irqEnable(IRQ_VBLANK);
     //REG_IME = 1;
-    load();
     
     // Set display mode (mode 3 + object layer enabled)
-    SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP);
+    SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
+
+	load();
+	print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}", 2);
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
@@ -71,7 +73,7 @@ int main(void)
     // Main loop
     while (1) {
         VBlankIntrWait(); // Waits for screen to be fully drawn
-
+		step(frame);
 
         //scanKeys();
 

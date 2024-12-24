@@ -1,2 +1,2 @@
 squeege.o: \
- C:/Users/evank/Documents/GitHub/SqueegeAdvance/source/images/squeege.c
+ /Users/jasonlandry/Documents/Evan/SqueegeAdvance/source/images/squeege.c

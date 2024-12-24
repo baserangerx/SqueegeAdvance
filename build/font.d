@@ -1,2 +1,2 @@
 font.o: \
- C:/Users/evank/Documents/GitHub/SqueegeAdvance/source/fonts/font.c
+ /Users/jasonlandry/Documents/Evan/SqueegeAdvance/source/fonts/font.c
