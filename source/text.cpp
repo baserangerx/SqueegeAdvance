@@ -46,7 +46,7 @@ void load()
 }
 
 
-dialogueBox::dialogueBox(u16 dla, u16 x, u16 y, u16 width, u16 height)
+dialogueBox::dialogueBox(u16 x, u16 y, u16 width, u16 height, u16 dla)
 {
 	delay = dla;
 	xPos = x;
@@ -58,24 +58,43 @@ void dialogueBox::Print(const char* txt)
 {
 	text = (char*)malloc(sizeof(char)*sizeX*sizeY);
 
-	for(int i = 0, j = 0; txt[i] != 0; i++)
+	for(int i = 0, j = 1, k = 0; txt[i] != 0; i++)
 	{
 		if(txt[i] == ' ')
 		{
-			if(i > sizeX)
+			while(!(txt[i + j] == ' ' || txt[i+j] == 0))
 			{
-				while(j % sizeX != 0)
-				{
-					text[j] = ' ';
-					j++;
-				}
+				j++;
 			}
-			j = i;
+			//if (txt[i+j] == 0) break;
+			if((i + j + k)/(1+floor((i+k)/sizeX)) > sizeX)
+			{
+				while((i + k) % sizeX != 0)
+				{
+					text[i+k] = ' ';
+					k++;
+					/*
+					once_i_was_nine_years_old
+					15
+					6
+					0
+
+
+					10
+					1
+					2
+					Welcome/to///
+					the/internet.../
+					*/
+				}
+				
+			}
+			j = 1;
 		}
-		else
-		{
-			text[i] = txt[i];
-		}
+
+		text[i+k] = txt[i];
+		if ((i + k) % sizeX == 0 && txt[i] == ' ') k--;
+
 	}
 	
 	letter = 0;

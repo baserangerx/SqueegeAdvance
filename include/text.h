@@ -14,7 +14,7 @@ class dialogueBox
 	u16 sizeY;
 	//dialogueBox(delay, x position, y position, width, height)
 	public:
-		dialogueBox(u16 delay, u16 x, u16 y, u16 width, u16 height);
+		dialogueBox(u16 x, u16 y, u16 width, u16 height, u16 dla = 2);
 		void Print(const char*);
 		void Step(const long);
 };

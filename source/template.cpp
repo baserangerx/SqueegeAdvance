@@ -58,9 +58,10 @@ int main(void)
     SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
 
 	load();
-	dialogueBox dB(2,5,10,16,4);
+	dialogueBox dB(1,10,28,4);
 
 	dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
+	//dB.Print("Once I was seven years old and I ate a large bird!!!");
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
