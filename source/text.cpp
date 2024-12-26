@@ -1,7 +1,9 @@
 #include <gba_video.h>
 #include <gba_sprites.h>
 #include <string.h>
+#include <math.h>
 #include "font.h"
+#include "text.h"
 
 /*
 void load()
@@ -43,24 +45,53 @@ void load()
     }
 }
 
-static const char* text = NULL;
-static int i = 0;
-static int delay;
-void print(const char* txt, const int DLA)
-{
-	text = txt;
-	i = 0;
-	delay = DLA;
-}
 
-void step(const int frame)
+dialogueBox::dialogueBox(u16 dla, u16 x, u16 y, u16 width, u16 height)
+{
+	delay = dla;
+	xPos = x;
+	yPos = y;
+	sizeX = width;
+	sizeY = height;
+}
+void dialogueBox::Print(const char* txt)
+{
+	text = (char*)malloc(sizeof(char)*sizeX*sizeY);
+
+	for(int i = 0, j = 0; txt[i] != 0; i++)
+	{
+		if(txt[i] == ' ')
+		{
+			if(i > sizeX)
+			{
+				while(j % sizeX != 0)
+				{
+					text[j] = ' ';
+					j++;
+				}
+			}
+			j = i;
+		}
+		else
+		{
+			text[i] = txt[i];
+		}
+	}
+	
+	letter = 0;
+}
+void dialogueBox::Step(const long frame)
 {
 	if(frame % delay == 0)
 	{
-		if(strlen(text) - i)
+		if(strlen(text) - letter)
 		{
-			((u16*)SCREEN_BASE_BLOCK(8))[i] = text[i]-32;
-			i++;
+			((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (int)floor(letter/sizeX))*32] = text[letter]-32;
+			letter++;
+		}
+		else
+		{
+			free(text);
 		}
 	}
 }
