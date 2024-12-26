@@ -76,6 +76,7 @@ int main(void)
     while (1) {
         VBlankIntrWait(); // Waits for screen to be fully drawn
 		dB.Step(frame);
+		
 		//step(frame);
 
         //scanKeys();
