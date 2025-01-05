@@ -60,8 +60,9 @@ int main(void)
 	load();
 	dialogueBox dB(1,10,28,4);
 
-	dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
+	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
+    dB.Print("Gwimbke gumplbe hiuosaghjisahbnd");
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
