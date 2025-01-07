@@ -28,7 +28,7 @@ const u16 sprite_palette[16] = {
     RGB5(20,20,20)
 };
 
-//this is just a really big test cuz idk how branches work :P
+//this is just a really big test cuz idk how branches work :P okay it didnt really work
 
 #define OAM_SIZE 128
 volatile Sprite oamBuffer[OAM_SIZE];
