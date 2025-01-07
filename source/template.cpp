@@ -58,11 +58,12 @@ int main(void)
     SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
 
 	load();
-	dialogueBox dB(1,10,28,4);
+	dialogueBox dB(2,12,26,4);
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
-    dB.Print("Gwimbke gumplbe hiuosaghjisahbnd");
+    //dB.Print("At least is wasnt freddy fivebaer cuz wilmlum afleon fount the kids and he murdered the frebby and now the kids frebbify and chicka is chicken & evil >:(");
+    dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (Also I really dont know if I should change how spaces work when stepping)");
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
