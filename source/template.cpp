@@ -29,7 +29,7 @@ const u16 sprite_palette[16] = {
 };
 
 //this is just a really big test cuz idk how branches work :P
-//okay this should be the real accual change
+//okay this should be the real accual changee
 
 #define OAM_SIZE 128
 volatile Sprite oamBuffer[OAM_SIZE];
