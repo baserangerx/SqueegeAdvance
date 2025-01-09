@@ -5,6 +5,7 @@
 #include <gba_sprites.h>
 #include <string.h>
 #include "squeege.h"
+#include "UI.h"
 #include "text.h"
 
 
@@ -41,6 +42,8 @@ void VBlankHandler(void) {
     // Code to run during VBlank (e.g., update sprite positions, palette, etc.)
 	memcpy(SPRITE_PALETTE, squeegePal, squeegePalLen); // Commit the pallet to VRAM
     memcpy(SPRITE_GFX, squeegeTiles + i*squeegeTilesLen/(4*6), squeegeTilesLen/6);   // Commit sprites to VRAM
+    memcpy(SPRITE_PALETTE+16, UIPal, UIPalLen);
+    memcpy((u8*)SPRITE_GFX+0x400, UITiles, UITilesLen);
     memcpy(OAM, (Sprite*)oamBuffer, sizeof(oamBuffer)); // Commit OAM to VRAM
     frame++;
     if (frame % 5 == 0)
@@ -60,7 +63,7 @@ int main(void)
     SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
 
 	load();
-	dialogueBox dB(2,12,26,4);
+	dialogueBox dB(2,12,26,6);
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
@@ -69,7 +72,7 @@ int main(void)
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
-    oamBuffer[0].Y = 6*8; 
+    oamBuffer[0].Y = 4*8; 
     oamBuffer[0].Shape = 0;  // Y=80, square sprite
     oamBuffer[0].X = ((30/2)-2)*8;
     oamBuffer[0].Size = 2;
@@ -89,7 +92,7 @@ int main(void)
         //u16 keys_pressed = keysDown();
         //u16 keys_released = keysUp();
 
-    
+        *((vu16*)0x5000022) += 1;
 	
     }
 

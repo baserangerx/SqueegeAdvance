@@ -116,7 +116,8 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 .PHONY: $(OUT_FILES) $(IMAGES) $(BUILD) clean
 
 all:
-	@make $(IMAGES)/squeege.c
+	@make $(IMAGES)/squeege.c var="-Mw 4 -Mh 4"
+	@make $(IMAGES)/UI.c var="-Mw 2 -Mh 2"
 	@make $(BUILD)
 #BULLSHIT CODE YAYYYYYYYYY
 $(IMAGES):
@@ -125,7 +126,7 @@ $(IMAGES):
 
 $(IMAGES)/%.c $(INCLUDES)/%.h: $(GRAPHICS)/%.bmp | $(IMAGES)
 	@echo "Converting $< to $@ using grit..."
-	@grit $< -Mw 4 -Mh 4 -gB4 -pe 16 -U16 -ftc -o$(IMAGES)/$*
+	@grit $< $(var) -gB4 -pe 16 -U16 -ftc -o$(IMAGES)/$*
 	@mv $(IMAGES)/$*.h $(INCLUDES)/
 	
 #---------------------------------------------------------------------------------
