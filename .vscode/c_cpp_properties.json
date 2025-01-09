@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/devkitpro/libgba/include",
+                "C:\\devkitPro\\libgba\\include",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/source/images"
             ],

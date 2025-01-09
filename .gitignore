@@ -1,4 +1,4 @@
-.vscode/*
 *.gba
 *.elf
 build/*
+.vscode/c_cpp_properties.json
