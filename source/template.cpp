@@ -58,11 +58,11 @@ int main(void)
     SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
 
 	load();
-	dialogueBox dB(1,10,28,4);
+	dialogueBox dB(2,12,26,4);
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
-    dB.Print("Gwimbke gumplbe hiuosaghjisahbnd");
+    dB.Print("I CAN FUCKING SPEAK!!!!!! WIMBLE WOMBLE TIL I GLOMBLE!");
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 

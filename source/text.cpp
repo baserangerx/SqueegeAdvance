@@ -105,7 +105,7 @@ void dialogueBox::Step(const long frame)
 	{
 		if(strlen(text) - letter)
 		{
-			((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (int)floor(letter/sizeX))*32] = text[letter]-32;
+			((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (2)*(int)floor(letter/sizeX))*32] = text[letter]-32;
 			letter++;
 		}
 		else
