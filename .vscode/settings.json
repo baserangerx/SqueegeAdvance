@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "gba_systemcalls.h": "c",
-        "gba_sprites.h": "c",
-        "gba_input.h": "c"
-    }
-}
