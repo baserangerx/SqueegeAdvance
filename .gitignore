@@ -1,1 +1,4 @@
 .vscode/*
+*.gba
+*.elf
+build/*

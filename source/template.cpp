@@ -28,6 +28,8 @@ const u16 sprite_palette[16] = {
     RGB5(20,20,20)
 };
 
+//this is just a really big test cuz idk how branches work :P okay it didnt really work
+
 #define OAM_SIZE 128
 volatile Sprite oamBuffer[OAM_SIZE];
 
@@ -62,7 +64,8 @@ int main(void)
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
-    dB.Print("I CAN FUCKING SPEAK!!!!!! WIMBLE WOMBLE TIL I GLOMBLE!");
+    //dB.Print("At least is wasnt freddy fivebaer cuz wilmlum afleon fount the kids and he murdered the frebby and now the kids frebbify and chicka is chicken & evil >:(");
+    dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (Also I really dont know if I should change how spaces work when stepping)");
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
