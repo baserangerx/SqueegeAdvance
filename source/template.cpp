@@ -63,16 +63,21 @@ int main(void)
     SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
 
 	load();
-	dialogueBox dB(2,12,26,6);
+	dialogueBox dB(1,13,28,6);
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
     //dB.Print("At least is wasnt freddy fivebaer cuz wilmlum afleon fount the kids and he murdered the frebby and now the kids frebbify and chicka is chicken & evil >:(");
-    dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (Also I really dont know if I should change how spaces work when stepping)");
+    dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)");
+    //dB.Print("why are you missing danny's birthday, cohen? You know pain is a small price to pay to spend time with those you love");
+
+    //dB.Print("the homuncules bot that nate mitchell has made is terrible and disgusting, evan landry himself has decided that the bot in un constitional, %%!");
+
+    //dB.Print("I am squeege, the lone deciple of YoRe!                             Prepare thyself!");
 
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
-    oamBuffer[0].Y = 4*8; 
+    oamBuffer[0].Y = 5*8; 
     oamBuffer[0].Shape = 0;  // Y=80, square sprite
     oamBuffer[0].X = ((30/2)-2)*8;
     oamBuffer[0].Size = 2;
