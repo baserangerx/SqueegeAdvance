@@ -1,7 +1,8 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-void load();
+void loadText();
+extern bool lockInput;
 
 class dialogueBox
 {
@@ -15,8 +16,10 @@ class dialogueBox
 	//dialogueBox(delay, x position, y position, width, height)
 	public:
 		dialogueBox(u16 x, u16 y, u16 width, u16 height, u16 dla = 2);
+		void Page(const u16);
 		void Print(const char*);
 		void Step(const long);
+		void Clear();
 };
 
 

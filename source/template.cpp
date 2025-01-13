@@ -9,73 +9,45 @@
 #include "text.h"
 
 
-// Simple sprite palette with white color
-const u16 sprite_palette[16] = {
-    RGB5(0, 0, 0),      // --BLANK--
-    RGB5(20, 0, 10),     // Dark Purple
-    RGB5(31, 5, 5),     // Red
-    RGB5(5, 15, 5),     // Dark Green
-    RGB5(31, 31, 31),    // White
-    RGB5(0, 0, 0),      // --BLANK--
-    RGB5(20, 0, 10),     // Dark Purple
-    RGB5(31, 5, 5),     // Red
-    RGB5(5, 15, 5),     // Dark Green
-    RGB5(31, 31, 31),    // White
-    RGB5(0, 0, 0),      // --BLANK--
-    RGB5(20, 0, 10),     // Dark Purple
-    RGB5(31, 5, 5),     // Red
-    RGB5(5, 15, 5),     // Dark Green
-    RGB5(31, 31, 31),    // White
-    RGB5(20,20,20)
-};
-
-//this is just a really big test cuz idk how branches work :P okay it didnt really work
-
 #define OAM_SIZE 128
 volatile Sprite oamBuffer[OAM_SIZE];
 
 int i = 0;
 long frame = 0;
 
-// VBlank interrupt handler
-void VBlankHandler(void) {
-    // Code to run during VBlank (e.g., update sprite positions, palette, etc.)
-	memcpy(SPRITE_PALETTE, squeegePal, squeegePalLen); // Commit the pallet to VRAM
-    memcpy(SPRITE_GFX, squeegeTiles + i*squeegeTilesLen/(4*6), squeegeTilesLen/6);   // Commit sprites to VRAM
-    memcpy(SPRITE_PALETTE+16, UIPal, UIPalLen);
-    memcpy((u8*)SPRITE_GFX+0x400, UITiles, UITilesLen);
-    memcpy(OAM, (Sprite*)oamBuffer, sizeof(oamBuffer)); // Commit OAM to VRAM
-    frame++;
-    if (frame % 5 == 0)
-        {
-            i >= 5 ? i = 0 : i++;
-        }
-}
+bool lockInput = 0;
+dialogueBox dB(1,13,28,6);
+void VBlankHandler(void);
 
 int main(void) 
 {
     irqInit();
-	irqSet(IRQ_VBLANK, VBlankHandler); // Calls VBlankHandler during VBLANK
+    irqSet(IRQ_VBLANK, VBlankHandler); // Calls VBlankHandler during VBLANK
     irqEnable(IRQ_VBLANK);
-    //REG_IME = 1;
     
     // Set display mode (mode 3 + object layer enabled)
     SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
 
-	load();
-	dialogueBox dB(1,13,28,6);
+    memcpy(SPRITE_PALETTE, squeegePal, squeegePalLen); // Commit the pallet to VRAM
+    memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
+    memcpy(SPRITE_PALETTE+16, UIPal, UIPalLen);
+    memcpy((u8*)SPRITE_GFX+0x400, UITiles, UITilesLen);
+
+    loadText();
+    dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)");
+
+	int page = 0;
+	
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
     //dB.Print("At least is wasnt freddy fivebaer cuz wilmlum afleon fount the kids and he murdered the frebby and now the kids frebbify and chicka is chicken & evil >:(");
-    dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)");
+    
     //dB.Print("why are you missing danny's birthday, cohen? You know pain is a small price to pay to spend time with those you love");
 
     //dB.Print("the homuncules bot that nate mitchell has made is terrible and disgusting, evan landry himself has decided that the bot in un constitional, %%!");
 
     //dB.Print("I am squeege, the lone deciple of YoRe!                             Prepare thyself!");
-
-    memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
 
     oamBuffer[0].Y = 5*8; 
     oamBuffer[0].Shape = 0;  // Y=80, square sprite
@@ -88,18 +60,35 @@ int main(void)
     // Main loop
     while (1) {
         VBlankIntrWait(); // Waits for screen to be fully drawn
-		dB.Step(frame);
-		//testing github commits
-		//step(frame);
+		int womp = keysDown();
 
-        //scanKeys();
-
-        //u16 keys_pressed = keysDown();
+        if ((womp & KEY_A) && !lockInput)
+        {
+            dB.Page(page);
+        }
+        if ((womp & KEY_R) && !lockInput)
+        {
+            dB.Page(++page);
+        }
         //u16 keys_released = keysUp();
 
-        *((vu16*)0x5000022) += 1;
+        //*((vu16*)0x5000002) += 1;
 	
     }
 
     return 0;
+}
+
+// VBlank interrupt handler
+void VBlankHandler(void) {
+    // Code to run during VBlank (e.g., update sprite positions, palette, etc.)
+    memcpy(SPRITE_GFX, squeegeTiles + i*squeegeTilesLen/(4*6), squeegeTilesLen/6);   // Commit sprites to VRAM
+    memcpy(OAM, (Sprite*)oamBuffer, sizeof(oamBuffer)); // Commit OAM to VRAM
+    scanKeys();
+    dB.Step(frame);
+    frame++;
+    if (frame % 5 == 0)
+        {
+            i >= 5 ? i = 0 : i++;
+        }
 }

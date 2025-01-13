@@ -6,33 +6,12 @@
 #include "UI.h"
 #include "text.h"
 
-/*
-void load()
-{
-    memcpy(BG_PALETTE, textPAL, 32);
-    u16* a = (u16*)VRAM;
-    for(int hl = 0; hl < 192; hl++)
-    {
-        for(int row = 0; row < 4; row++)
-        {
-            for(int col = 0; col < 2; col++)
-            {
-                a[(col + 2*row + 2*4*hl)] = ((toncfontTiles[hl] >> (col*4+row*8)) & 0b1);
-                a[(col + 2*row + 2*4*hl)] |= (((toncfontTiles[hl] >> (col*4+row*8)) & 0b10))<<3;
-                a[(col + 2*row + 2*4*hl)] |= (((toncfontTiles[hl] >> (col*4+row*8)) & 0b100))<<6;
-                a[(col + 2*row + 2*4*hl)] |= (((toncfontTiles[hl] >> (col*4+row*8)) & 0b1000))<<9;
-            }
-        }
-    }
-}
-*/
-
-void load()
+void loadText()
 {
 	REG_BG0CNT = BG_PRIORITY(0) | CHAR_BASE(0) | BG_16_COLOR | SCREEN_BASE(8) | BG_SIZE_0;
 
-    memcpy(BG_PALETTE, textPAL, 32);
-	memcpy((u8*)BG_PALETTE + 0x20, UIPal, 32);
+    memcpy(BG_PALETTE, UIPal, UIPalLen);
+	//memcpy((u8*)BG_PALETTE + 0x20, UIPal, 32);
     //u32* a = (u32*)CHAR_BASE_BLOCK(0);
 
     for (int hl = 2; hl < 192; hl++)
@@ -83,15 +62,35 @@ dialogueBox::dialogueBox(u16 x, u16 y, u16 width, u16 height, u16 dla)
 			bool flipX = col > sizeX/2-1;
 			bool flipY = row > sizeY/2-1;
 
-			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*flipY)+flipX] = (96+tile*4) | 1<<0xC | ATTR1_FLIP_X*flipX | flipX<<10 | flipY<<11;
-			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*flipY)+!flipX] = (96+1+tile*4) | 1<<0xC | flipX<<10 | flipY<<11;
-			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*!flipY)+flipX] = (96+2+tile*4) | 1<<0xC | flipX<<10 | flipY<<11;
-			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*!flipY)+!flipX] = (96+3+tile*4) | 1<<0xC | flipX<<10 | flipY<<11;
+			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*flipY)+flipX] = (96+tile*4) | flipX<<10 | flipX<<10 | flipY<<11;
+			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*flipY)+!flipX] = (96+1+tile*4) | flipX<<10 | flipY<<11;
+			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*!flipY)+flipX] = (96+2+tile*4) | flipX<<10 | flipY<<11;
+			((u16*)SCREEN_BASE_BLOCK(8))[(row*2 + yPos - 1)*32+col*2+(32*!flipY)+!flipX] = (96+3+tile*4) | flipX<<10 | flipY<<11;
 		}
 	}
 }
+
+
+void dialogueBox::Page(const u16 page)
+{
+	Clear();
+	switch (page)
+	{
+		case 0:
+			*((vu16*)0x5000002) = 0b0000000000011111;
+			break;
+		case 1:
+			*((vu16*)0x5000002) = 0b0000001111100000;
+			break;
+		case 2:
+			*((vu16*)0x5000002) = 0b0111110000000000;
+			break;
+	};
+}
+
 void dialogueBox::Print(const char* txt)
 {
+	Clear();
 	text = (char*)malloc(sizeof(char)*sizeX*sizeY);
 	for(int i = 0, j = 1, k = 0; txt[i] != 0; i++)
 	{
@@ -108,19 +107,6 @@ void dialogueBox::Print(const char* txt)
 				{
 					text[i+k] = ' ';
 					k++;
-					/*
-					once_i_was_nine_years_old
-					15
-					6
-					0
-
-
-					10
-					1
-					2
-					Welcome/to///
-					the/internet.../
-					*/
 				}
 				
 			}
@@ -136,10 +122,12 @@ void dialogueBox::Print(const char* txt)
 }
 void dialogueBox::Step(const long frame)
 {
+	if(text == NULL) return;
 	if(frame % delay == 0)
 	{
 		if(strlen(text) - letter)
 		{
+			lockInput = 1;
 			((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (int)floor(letter/sizeX))*32] = (text[letter]== ' ' ? 0x7F : text[letter])-32;
 			//((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (int)floor(letter/sizeX))*32] = (text[letter]-32) | (2<<10);
 			//((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (int)floor(letter/sizeX))*32] += (1 << 12);
@@ -148,6 +136,17 @@ void dialogueBox::Step(const long frame)
 		else
 		{
 			free(text);
+			lockInput = 0;
+		}
+	}
+}
+void dialogueBox::Clear()
+{
+	for(u16 row = 0; row < sizeY; row++)
+	{
+		for(u16 col = 0; col < sizeX; col++)
+		{
+			((u16*)SCREEN_BASE_BLOCK(8))[(xPos + col) + (yPos + row)*32] = 0x5F;
 		}
 	}
 }
