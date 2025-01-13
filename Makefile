@@ -118,6 +118,7 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 all:
 	@make $(IMAGES)/squeege.c var="-Mw 4 -Mh 4"
 	@make $(IMAGES)/UI.c var="-Mw 2 -Mh 2"
+	@make $(IMAGES)/sewer.c var="-Mw 30 -Mh 20"
 	@make $(BUILD)
 #BULLSHIT CODE YAYYYYYYYYY
 $(IMAGES):
