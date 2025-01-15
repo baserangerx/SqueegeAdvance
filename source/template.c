@@ -6,8 +6,8 @@
 #include <string.h>
 #include "squeege.h"
 #include "UI.h"
-#include "text.h"
 #include "sewer.h"
+#include "text.h"
 
 /*
 
@@ -24,11 +24,11 @@ int i = 0;
 long frame = 0;
 
 bool lockInput = 0;
-DialogueBox dB(1,14,28,5);
 void VBlankHandler(void);
 
 int main(void) 
 {
+    createDialogueBox(1,14,28,5,2);
     irqInit();
     irqSet(IRQ_VBLANK, VBlankHandler); // Calls VBlankHandler during VBLANK
     irqEnable(IRQ_VBLANK);
@@ -53,10 +53,11 @@ int main(void)
             ((u16*)SCREEN_BASE_BLOCK(6))[row*32 + col] = (row*30+col) | (2<<0xc);
         }
     }
-
+    //Consumable apple("apple", "cool apple");
+    //gainItem(apple);
 
     loadText();
-    dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)");
+    dialoguePrint("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)");
 
 	int page = 0;
 	
@@ -88,16 +89,16 @@ int main(void)
 
         if ((womp & KEY_A) && !lockInput)
         {
-            dB.Page(4);
-            dB.Page(page=0);      
+            loadPage(4);
+            loadPage(page=0);      
         }
         if ((womp & KEY_R) && !lockInput)
         {
-            dB.Page(page<3 ? ++page : page=0);
+            loadPage(page<3 ? ++page : (page=0));
         }
         if ((womp & KEY_L) && !lockInput)
         {
-            dB.Page(page>0 ? --page : page=3);
+            loadPage(page>0 ? --page : (page=3));
         }
         //u16 keys_released = keysUp();
 
@@ -114,7 +115,7 @@ void VBlankHandler(void) {
     memcpy(SPRITE_GFX, squeegeTiles + i*squeegeTilesLen/(4*6), squeegeTilesLen/6);   // Commit sprites to VRAM
     memcpy(OAM, (Sprite*)oamBuffer, sizeof(oamBuffer)); // Commit OAM to VRAM
     scanKeys();
-    dB.Step(frame);
+    dialogueStep(frame);
     frame++;
     if (frame % 5 == 0)
         {

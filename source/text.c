@@ -5,7 +5,16 @@
 #include "font.h"
 #include "UI.h"
 #include "text.h"
-#include "items.h"
+#include "stdlib.h"
+
+char* text;
+
+u16 letter;
+u16 delay;
+u16 xPos;
+u16 yPos;
+u16 sizeX;
+u16 sizeY;
 
 void loadText()
 {
@@ -31,7 +40,7 @@ void loadText()
 }
 
 
-DialogueBox::DialogueBox(const u16 x, const u16 y, const u16 width, const u16 height, const u16 dla)
+void createDialogueBox(const u16 x, const u16 y, const u16 width, const u16 height, const u16 dla)
 {
 	delay = dla;
 	xPos = x;
@@ -72,9 +81,9 @@ DialogueBox::DialogueBox(const u16 x, const u16 y, const u16 width, const u16 he
 }
 
 
-void DialogueBox::Page(const u16 page)
+void loadPage(u16 page)
 {
-	Clear();
+	dialogueClear();
 	((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1) + (yPos-1)*32] = 96;
 	for(int i = 1; i < 4*2+1; i++)
 	{
@@ -115,7 +124,8 @@ void DialogueBox::Page(const u16 page)
 
 			for(int i = 0; i < 6; i++)
 			{
-				Write(xPos + (i%2)*sizeX/2, yPos + floor(i/2)*2, "- Monoter");
+				dialogueWrite(xPos + (i%2)*sizeX/2, yPos + floor(i/2)*2, "- ");
+				//Write(xPos + (i%2)*sizeX/2 + 2, yPos + floor(i/2)*2, );
 			}
 			break;
 		case 3:
@@ -142,9 +152,9 @@ void DialogueBox::Page(const u16 page)
 	};
 }
 
-void DialogueBox::Print(const char* txt)
+void dialoguePrint(const char* txt)
 {
-	Clear();
+	dialogueClear();
 	text = (char*)malloc(sizeof(char)*sizeX*sizeY);
 	for(int i = 0, j = 1, k = 0; txt[i] != 0; i++)
 	{
@@ -171,10 +181,9 @@ void DialogueBox::Print(const char* txt)
 		if ((i + k) % sizeX == 0 && txt[i] == ' ') k--;
 
 	}
-	
 	letter = 0;
 }
-void DialogueBox::Step(const long frame)
+void dialogueStep(const long frame)
 {
 	if(text == NULL) return;
 	if(frame % delay == 0)
@@ -194,14 +203,14 @@ void DialogueBox::Step(const long frame)
 		}
 	}
 }
-void DialogueBox::Write(const u16 x, const u16 y, const char* text)
+void dialogueWrite(const u16 x, const u16 y, const char* text)
 {
 	for (u16 i = 0; i < strlen(text); i++)
 	{
 		((u16*)SCREEN_BASE_BLOCK(7))[x+i + y*32] = (text[i]== ' ' ? 0x7F : text[i])-32;;
 	}
 }
-void DialogueBox::Clear()
+void dialogueClear()
 {
 	for(u16 row = 0; row < sizeY; row++)
 	{
