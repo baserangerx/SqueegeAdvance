@@ -7,7 +7,15 @@
 #include "squeege.h"
 #include "UI.h"
 #include "text.h"
+#include "sewer.h"
 
+/*
+
+REMEMBER TO ADD THE Monoter
+
+bits & bytes
+bytecoin
+*/
 
 #define OAM_SIZE 128
 volatile Sprite oamBuffer[OAM_SIZE];
@@ -16,7 +24,7 @@ int i = 0;
 long frame = 0;
 
 bool lockInput = 0;
-dialogueBox dB(1,13,28,6);
+DialogueBox dB(1,14,28,5);
 void VBlankHandler(void);
 
 int main(void) 
@@ -26,12 +34,26 @@ int main(void)
     irqEnable(IRQ_VBLANK);
     
     // Set display mode (mode 3 + object layer enabled)
-    SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON);
+    SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON | BG1_ON);
 
     memcpy(SPRITE_PALETTE, squeegePal, squeegePalLen); // Commit the pallet to VRAM
     memset((void*)(oamBuffer), 0, sizeof(oamBuffer));
     memcpy(SPRITE_PALETTE+16, UIPal, UIPalLen);
-    memcpy((u8*)SPRITE_GFX+0x400, UITiles, UITilesLen);
+    //memcpy((u8*)SPRITE_GFX+0x400, UITiles, UITilesLen);
+
+    memcpy(BG_PALETTE+0x20, sewerPal, sewerPalLen);
+    memcpy(CHAR_BASE_BLOCK(1), sewerTiles, sewerTilesLen);
+    REG_BG1CNT = BG_PRIORITY(0) | CHAR_BASE(1) | BG_16_COLOR | SCREEN_BASE(6) | BG_SIZE_0;
+    REG_BG1VOFS=8*5;
+    
+    for(int row = 0; row < 20; row++)
+    {
+        for(int col = 0; col < 30; col++)
+        {
+            ((u16*)SCREEN_BASE_BLOCK(6))[row*32 + col] = (row*30+col) | (2<<0xc);
+        }
+    }
+
 
     loadText();
     dB.Print("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)");
@@ -49,6 +71,8 @@ int main(void)
 
     //dB.Print("I am squeege, the lone deciple of YoRe!                             Prepare thyself!");
 
+    //dB.Print("Check out all my wires")
+
     oamBuffer[0].Y = 5*8; 
     oamBuffer[0].Shape = 0;  // Y=80, square sprite
     oamBuffer[0].X = ((30/2)-2)*8;
@@ -64,11 +88,16 @@ int main(void)
 
         if ((womp & KEY_A) && !lockInput)
         {
-            dB.Page(page);
+            dB.Page(3);
+            dB.Page(page=0);      
         }
         if ((womp & KEY_R) && !lockInput)
         {
-            dB.Page(++page);
+            dB.Page(page<2 ? ++page : page=0);
+        }
+        if ((womp & KEY_L) && !lockInput)
+        {
+            dB.Page(page>0 ? --page : page=2);
         }
         //u16 keys_released = keysUp();
 

@@ -4,7 +4,7 @@
 void loadText();
 extern bool lockInput;
 
-class dialogueBox
+class DialogueBox
 {
 	char* text;
 	u16 letter;
@@ -15,10 +15,11 @@ class dialogueBox
 	u16 sizeY;
 	//dialogueBox(delay, x position, y position, width, height)
 	public:
-		dialogueBox(u16 x, u16 y, u16 width, u16 height, u16 dla = 2);
+		DialogueBox(const u16 x, const u16 y, const u16 width, const u16 height, const u16 dla = 2);
 		void Page(const u16);
 		void Print(const char*);
 		void Step(const long);
+		void Write(const u16 x, const u16 y, const char* name);
 		void Clear();
 };
 
