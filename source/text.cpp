@@ -22,7 +22,7 @@ void loadText()
             ((u32*)CHAR_BASE_BLOCK(0))[(row + 4 * hl)] = 0;
             for (int col = 0; col < 8; col++)
             {
-                ((u32*)CHAR_BASE_BLOCK(0))[(row + 4 * hl)] |= (((toncfontTiles[hl] >> (row * 8)) & (0b1 << col)) > 0 ? ((toncfontTiles[hl] >> (row * 8)) & (0b1 << col)) : 2<<col) << (3 * col);
+                ((u32*)CHAR_BASE_BLOCK(0))[(row + 4 * hl)] |= (((toncfontTiles[hl] >> (row * 8)) & (0b1 << col)) > 0 ? ((toncfontTiles[hl] >> (row * 8)) & (0b1 << col))*7 : 1<<col) << (3 * col);
             }
         }
     }
@@ -54,16 +54,16 @@ DialogueBox::DialogueBox(const u16 x, const u16 y, const u16 width, const u16 he
 			}
 			else if(col == 0 || col == sizeX+1)
 			{
-				tile = 3;
+				tile = 2;
 			}
 			else
 			{
-				tile = 4;
+				tile = 3;
 			}
 			bool flipX = col > sizeX;
 			bool flipY = row > sizeY;
 
-			((u16*)SCREEN_BASE_BLOCK(7))[(row + yPos - 1)*32+col+xPos-1] = (96+tile*4) | flipX<<10 | flipY<<11;
+			((u16*)SCREEN_BASE_BLOCK(7))[(row + yPos - 1)*32+col+xPos-1] = (96+tile) | flipX<<10 | flipY<<11;
 			//((u16*)SCREEN_BASE_BLOCK(7))[(row*2 + yPos - 1)*32+col*2+(32*flipY)+!flipX] = (96+1+tile*4) | flipX<<10 | flipY<<11;
 			//((u16*)SCREEN_BASE_BLOCK(7))[(row*2 + yPos - 1)*32+col*2+(32*!flipY)+flipX] = (96+2+tile*4) | flipX<<10 | flipY<<11;
 			//((u16*)SCREEN_BASE_BLOCK(7))[(row*2 + yPos - 1)*32+col*2+(32*!flipY)+!flipX] = (96+3+tile*4) | flipX<<10 | flipY<<11;
@@ -76,46 +76,68 @@ void DialogueBox::Page(const u16 page)
 {
 	Clear();
 	((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1) + (yPos-1)*32] = 96;
-	for(int i = 1; i < 3*2; i++)
+	for(int i = 1; i < 4*2+1; i++)
 	{
-		((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+i) + (yPos-1)*32] = 100;
+		((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+i) + (yPos-1)*32] = 97;
 	}
 
 	switch (page)
 	{
 		case 0:
-			*((vu16*)0x5000002) = 0x253F;
+			*((vu16*)0x500000E) = *((vu16*)0x5000006);
+			*((vu16*)0x5000010) = *((vu16*)0x5000006);
+			//*((vu16*)0x5000012) = *((vu16*)0x5000008);
+			//*((vu16*)0x5000014) = *((vu16*)0x500000A);
 
-			((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1) + (yPos-1)*32] = 108;
-			((u16*)SCREEN_BASE_BLOCK(7))[(xPos) + (yPos-1)*32] = 108+1;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1) + (yPos-1)*32] = 98;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos) + (yPos-1)*32] = 99;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+1) + (yPos-1)*32] = 100;
 			break;
 		case 1:
-			*((vu16*)0x5000002) = 0x7D2A;
+			*((vu16*)0x500000E) = *((vu16*)0x5000008);
+			*((vu16*)0x5000010) = *((vu16*)0x5000008);
+			*((vu16*)0x5000012) = *((vu16*)0x5000008);
+			//*((vu16*)0x5000014) = *((vu16*)0x500000A);
 
-			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+1) + (yPos-1)*32] = 108+1;
-			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+2) + (yPos-1)*32] = 108+1;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+1) + (yPos-1)*32] = 99;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+2) + (yPos-1)*32] = 99;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+3) + (yPos-1)*32] = 100;
 			break;
 		case 2:
-			*((vu16*)0x5000002) = 0x27E8;
+			*((vu16*)0x500000E) = *((vu16*)0x500000A);
+			//*((vu16*)0x5000010) = *((vu16*)0x5000008);
+			*((vu16*)0x5000012) = *((vu16*)0x500000A);
+			*((vu16*)0x5000014) = *((vu16*)0x500000A);
 
-			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+3) + (yPos-1)*32] = 108+1;
-			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+4) + (yPos-1)*32] = 108+1;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+3) + (yPos-1)*32] = 99;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+4) + (yPos-1)*32] = 99;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+5) + (yPos-1)*32] = 100;
 
 			for(int i = 0; i < 6; i++)
 			{
-				Write(xPos + (i%2)*sizeX/2, yPos + floor(i/2)*2, "- Test");
+				Write(xPos + (i%2)*sizeX/2, yPos + floor(i/2)*2, "- Monoter");
 			}
 			break;
 		case 3:
-			for (int i = 0; i < 3; i++)
+			*((vu16*)0x500000E) = *((vu16*)0x500000C);
+			//*((vu16*)0x5000010) = *((vu16*)0x5000008);
+			//*((vu16*)0x5000012) = *((vu16*)0x500000A);
+			*((vu16*)0x5000014) = *((vu16*)0x500000C);
+
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+5) + (yPos-1)*32] = 99;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+6) + (yPos-1)*32] = 99;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos+7) + (yPos-1)*32] = 100;
+
+		case 4:
+			for (int i = 0; i < 4; i++)
             {
-                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*i)) + (yPos-3)*32] = 120+(4*i);
-                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos+(2*i)) + (yPos-3)*32] = 120+1+(4*i);
-                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*i)) + (yPos-2)*32] = 120+2+(4*i);
-                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos+(2*i)) + (yPos-2)*32] = 120+3+(4*i);
+                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*i)) + (yPos-3)*32] = 104+(4*i);
+                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos+(2*i)) + (yPos-3)*32] = 104+1+(4*i);
+                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*i)) + (yPos-2)*32] = 104+2+(4*i);
+                ((u16*)SCREEN_BASE_BLOCK(7))[(xPos+(2*i)) + (yPos-2)*32] = 104+3+(4*i);
             }
-			((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*3)) + (yPos-3)*32] = 118;
-            ((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*3)) + (yPos-2)*32] = 118;
+			((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*4)) + (yPos-3)*32] = 101;
+            ((u16*)SCREEN_BASE_BLOCK(7))[(xPos-1+(2*4)) + (yPos-2)*32] = 103;
 			break;
 	};
 }

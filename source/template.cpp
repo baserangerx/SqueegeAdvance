@@ -88,16 +88,16 @@ int main(void)
 
         if ((womp & KEY_A) && !lockInput)
         {
-            dB.Page(3);
+            dB.Page(4);
             dB.Page(page=0);      
         }
         if ((womp & KEY_R) && !lockInput)
         {
-            dB.Page(page<2 ? ++page : page=0);
+            dB.Page(page<3 ? ++page : page=0);
         }
         if ((womp & KEY_L) && !lockInput)
         {
-            dB.Page(page>0 ? --page : page=2);
+            dB.Page(page>0 ? --page : page=3);
         }
         //u16 keys_released = keysUp();
 
