@@ -8,6 +8,7 @@
 #include "UI.h"
 #include "sewer.h"
 #include "text.h"
+#include "input.h"
 
 /*
 
@@ -23,15 +24,15 @@ volatile Sprite oamBuffer[OAM_SIZE];
 int i = 0;
 long frame = 0;
 
-bool lockInput = 0;
 void VBlankHandler(void);
 
 int main(void) 
 {
-    createDialogueBox(1,14,28,5,2);
+    //createDialogueBox(1,14,28,5,2);
     irqInit();
     irqSet(IRQ_VBLANK, VBlankHandler); // Calls VBlankHandler during VBLANK
     irqEnable(IRQ_VBLANK);
+    //irqEnable();
     
     // Set display mode (mode 3 + object layer enabled)
     SetMode(MODE_0 | OBJ_ON | OBJ_1D_MAP | BG0_ON | BG1_ON);
@@ -57,9 +58,7 @@ int main(void)
     //gainItem(apple);
 
     loadText();
-    dialoguePrint("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)");
-
-	int page = 0;
+    dialoguePrint("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)", 2);
 	
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
@@ -85,21 +84,8 @@ int main(void)
     // Main loop
     while (1) {
         VBlankIntrWait(); // Waits for screen to be fully drawn
-		int womp = keysDown();
-
-        if ((womp & KEY_A) && !lockInput)
-        {
-            loadPage(4);
-            loadPage(page=0);      
-        }
-        if ((womp & KEY_R) && !lockInput)
-        {
-            loadPage(page<3 ? ++page : (page=0));
-        }
-        if ((womp & KEY_L) && !lockInput)
-        {
-            loadPage(page>0 ? --page : (page=3));
-        }
+        scanKeys();
+        if (!lockInput) {updateInput();}
         //u16 keys_released = keysUp();
 
         //*((vu16*)0x5000002) += 1;
@@ -114,7 +100,6 @@ void VBlankHandler(void) {
     // Code to run during VBlank (e.g., update sprite positions, palette, etc.)
     memcpy(SPRITE_GFX, squeegeTiles + i*squeegeTilesLen/(4*6), squeegeTilesLen/6);   // Commit sprites to VRAM
     memcpy(OAM, (Sprite*)oamBuffer, sizeof(oamBuffer)); // Commit OAM to VRAM
-    scanKeys();
     dialogueStep(frame);
     frame++;
     if (frame % 5 == 0)
