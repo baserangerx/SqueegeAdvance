@@ -35,6 +35,18 @@ void drawBox(const u16 _x, const u16 _y, const u16 _width, const u16 _height)
 	}
 }
 
+void drawColour(const u16 _x, const u16 _y, const u16 _width, const u16 _height, const u8 _pallet)
+{
+	for(int row = 0; row < _height; row++)
+	{
+		for(int col = 0; col < _width; col++)
+		{
+			((u16*)SCREEN_BASE_BLOCK(7))[(row + _y)*32+col+_x] &= 0x0FFF;
+			((u16*)SCREEN_BASE_BLOCK(7))[(row + _y)*32+col+_x] |= (_pallet<<0xC);
+		}
+	}
+}
+
 void drawClear(const u16 _x, const u16 _y, const u16 _width, const u16 _height)
 {
     for (int row = 0; row < _height+2; row++)

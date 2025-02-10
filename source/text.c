@@ -48,23 +48,42 @@ void loadText()
         }
     }
 	memcpy((u8*)CHAR_BASE_BLOCK(0) + 0xc00, UITiles, UITilesLen);
+	loadDialogueBox();
+}
+
+void loadDialogueBox()
+{
 	drawBox(POS_X,POS_Y,WIDTH,HEIGHT);
 }
 
 void updateSelection(const u8 selected)
 {
-	for(int row = 0; row < HEIGHT; row++)
+	drawColour(POS_X, POS_Y, WIDTH, HEIGHT, 0);
+	drawColour(POS_X+((selected%2)*WIDTH/2), POS_Y+(floor(selected/2)*2), WIDTH/2, 1, 1);
+	//for(int i = 0; i < WIDTH/2; i++)
+	//{
+		//((u16*)SCREEN_BASE_BLOCK(7))[(u16)(POS_Y+floor(selected/2)*2)*32 + POS_X+i+((selected%2)*WIDTH/2)] &= 0x0FFF;
+		//((u16*)SCREEN_BASE_BLOCK(7))[(u16)(POS_Y+floor(selected/2)*2)*32 + POS_X+i+((selected%2)*WIDTH/2)] |= (1<<0xC);
+	//}
+}
+
+void showPageIcons(bool _true)
+{
+	if (_true == 1)
 	{
-		for(int col = 0; col < WIDTH; col++)
-		{
-			((u16*)SCREEN_BASE_BLOCK(7))[(row + POS_Y)*32+col+POS_X] &= 0x0FFF;
-			((u16*)SCREEN_BASE_BLOCK(7))[(row + POS_Y)*32+col+POS_X] |= (0<<0xC);
-		}
+		for (int i = 0; i < 4; i++)
+            {
+                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*i)) + (POS_Y-3)*32] = 104+(4*i);
+                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+(2*i)) + (POS_Y-3)*32] = 104+1+(4*i);
+                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*i)) + (POS_Y-2)*32] = 104+2+(4*i);
+                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+(2*i)) + (POS_Y-2)*32] = 104+3+(4*i);
+            }
+			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*4)) + (POS_Y-3)*32] = 101;
+            ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*4)) + (POS_Y-2)*32] = 103;
 	}
-	for(int i = 0; i < WIDTH/2; i++)
+	else
 	{
-		((u16*)SCREEN_BASE_BLOCK(7))[(u16)(POS_Y+floor(selected/2)*2)*32 + POS_X+i+((selected%2)*WIDTH/2)] &= 0x0FFF;
-		((u16*)SCREEN_BASE_BLOCK(7))[(u16)(POS_Y+floor(selected/2)*2)*32 + POS_X+i+((selected%2)*WIDTH/2)] |= (1<<0xC);
+		drawClear(POS_X, POS_Y-2, 7, 0);
 	}
 }
 
@@ -126,18 +145,6 @@ void loadPage(u16 page)
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+5) + (POS_Y-1)*32] = 99;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+6) + (POS_Y-1)*32] = 99;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+7) + (POS_Y-1)*32] = 100;
-			break;
-
-		case 4:
-			for (int i = 0; i < 4; i++)
-            {
-                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*i)) + (POS_Y-3)*32] = 104+(4*i);
-                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+(2*i)) + (POS_Y-3)*32] = 104+1+(4*i);
-                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*i)) + (POS_Y-2)*32] = 104+2+(4*i);
-                ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+(2*i)) + (POS_Y-2)*32] = 104+3+(4*i);
-            }
-			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*4)) + (POS_Y-3)*32] = 101;
-            ((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1+(2*4)) + (POS_Y-2)*32] = 103;
 			break;
 	};
 }

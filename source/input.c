@@ -28,9 +28,9 @@ void updateInput()
         case DIALOGUE_MODE:
             if (downKeys & KEY_A)
             {
-                loadPage(4);
+                showPageIcons(1);
                 loadPage(page=0);
-                mode = 1;      
+                mode = COMBAT_MODE;      
             }
         break;
         case COMBAT_MODE: 
@@ -65,16 +65,28 @@ void combatInput(const u16 downKeys)
     if(downKeys & KEY_DOWN) updateSelection(selected < 4 ? (selected += 2) : (selected -= 4));
     if(downKeys & KEY_A)
     {
+        //selected = 0;
         mode = OPTION_MODE;
-        showItemOptions();
+        showItemOptions(1);
     }
 }
 
 void optionInput(const u16 downKeys)
 {
+    static u8 selected = 0;
     if(downKeys & KEY_B)
     {
-        clearItemOptions();
+        selected = 0;
+        showItemOptions(0);
         mode = COMBAT_MODE;
+        return;
     }
+    if(downKeys & KEY_A)
+    {
+        infoItem();
+        mode = DIALOGUE_MODE;
+        return;
+    }
+    if(downKeys & KEY_UP) updateOption(selected > 0 ? (--selected) : (selected = 1));
+    if(downKeys & KEY_DOWN) updateOption(selected < 1 ? (++selected) : (selected = 0));
 }

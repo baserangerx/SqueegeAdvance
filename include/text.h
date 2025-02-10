@@ -3,9 +3,11 @@
 #include <gba_video.h>
 
 void loadText();
+void loadDialogueBox();
 //dialogueBox(delay, x position, y position, width, height)
 void updateSelection(const u8);
 void drawBox(const u16 x, const u16 y, const u16 width, const u16 height);
+void showPageIcons(bool);
 void loadPage(u16);
 void dialoguePrint(const char*, const u16);
 void dialogueStep(const long);

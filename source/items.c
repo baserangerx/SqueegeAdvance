@@ -1,6 +1,8 @@
 #include "items.h"
 #include "stdlib.h"
 
+//sweet treat
+
 item* inventory[16];
 
 item createItem(char* _name, char* _description)
