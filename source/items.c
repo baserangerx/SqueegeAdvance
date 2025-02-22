@@ -3,7 +3,7 @@
 
 //sweet treat
 
-item* inventory[16];
+item inventory[16];
 
 item createItem(char* _name, char* _description)
 {
@@ -15,9 +15,9 @@ item createItem(char* _name, char* _description)
 void addItem(item* _item)
 {
     int i = 0;
-    while(inventory[i]!=NULL)
+    while(inventory[i].name!=NULL)
     {
         i++;
     };
-    inventory[i]=_item;
+    inventory[i]=*_item;
 }

@@ -1,7 +1,7 @@
 #include "action_options.h"
 #include "draw.h"
 #include "text.h"
-#include "items.h"
+//#include "items.h"
 
 #define POS_X 24
 #define POS_Y 10
@@ -29,11 +29,13 @@ void useItem()
 }
 
 //const item* _item
-void infoItem()
+void infoItem(item* _item)
 {
     showItemOptions(0);
     showPageIcons(0);
     loadDialogueBox();
+    dialogueWrite(1,12,_item->name);
+    dialoguePrint(_item->description, 1);
 }
 
 void updateOption(const u8 _selected)

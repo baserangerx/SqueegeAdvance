@@ -8,7 +8,7 @@ typedef struct item
     void (*action)();
 } item;
 
-extern item* inventory[];
+extern item inventory[];
 
 item createItem(char*,char*);
 void addItem(item*);

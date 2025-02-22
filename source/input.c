@@ -3,10 +3,10 @@
 #include "draw.h"
 #include "action_options.h"
 #include <gba_input.h>
+#include <stdlib.h>
 
 bool lockInput;
 int page = 0;
-
 enum InputMode
 {
     DIALOGUE_MODE,
@@ -63,7 +63,7 @@ void combatInput(const u16 downKeys)
     if(downKeys & KEY_LEFT) updateSelection(selected > 0 ? (--selected) : (selected = 5));
     if(downKeys & KEY_UP) updateSelection(selected > 1 ? (selected -= 2) : (selected += 4));
     if(downKeys & KEY_DOWN) updateSelection(selected < 4 ? (selected += 2) : (selected -= 4));
-    if(downKeys & KEY_A)
+    if(downKeys & KEY_A && page == 2)
     {
         //selected = 0;
         mode = OPTION_MODE;
@@ -73,20 +73,34 @@ void combatInput(const u16 downKeys)
 
 void optionInput(const u16 downKeys)
 {
-    static u8 selected = 0;
+    static u8* selected;
+    if (selected == NULL)
+    {
+        selected = calloc(1,sizeof(u8));
+    }
     if(downKeys & KEY_B)
     {
-        selected = 0;
+        //*selected = 0;
         showItemOptions(0);
         mode = COMBAT_MODE;
+        free(selected);
         return;
     }
     if(downKeys & KEY_A)
     {
-        infoItem();
-        mode = DIALOGUE_MODE;
-        return;
+        if((*selected) == 0)
+        {
+            return;
+        }
+        else if((*selected) == 1)
+        {
+            infoItem(&inventory[0]);
+            mode = DIALOGUE_MODE;
+            free(selected);
+            return;
+        }
+        
     }
-    if(downKeys & KEY_UP) updateOption(selected > 0 ? (--selected) : (selected = 1));
-    if(downKeys & KEY_DOWN) updateOption(selected < 1 ? (++selected) : (selected = 0));
+    if(downKeys & KEY_UP) updateOption((*selected) > 0 ? (--(*selected)) : ((*selected) = 1));
+    if(downKeys & KEY_DOWN) updateOption((*selected) < 1 ? (++(*selected)) : ((*selected) = 0));
 }

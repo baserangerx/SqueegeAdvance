@@ -12,6 +12,7 @@
 
 
 char* text;
+u16 textLength = 0;
 
 #define POS_X 1
 #define POS_Y 14
@@ -133,7 +134,7 @@ void loadPage(u16 page)
 			for(int i = 0; i < 6; i++)
 			{
 				dialogueWrite(POS_X + (i%2)*WIDTH/2, POS_Y + floor(i/2)*2, "- ");
-				dialogueWrite(POS_X + (i%2)*WIDTH/2 + 2, POS_Y + floor(i/2)*2, inventory[i] != NULL ? inventory[i]->name : "");
+				dialogueWrite(POS_X + (i%2)*WIDTH/2 + 2, POS_Y + floor(i/2)*2, inventory[i].name != NULL ? inventory[i].name : "");
 			}
 			break;
 		case 3:
@@ -152,31 +153,48 @@ void loadPage(u16 page)
 void dialoguePrint(const char* _txt, const u16 _delay)
 {
 	dialogueClear();
+	textLength = 0;
 	delay = _delay;
-	text = (char*)malloc(sizeof(char)*WIDTH*HEIGHT);
-	for(int i = 0, j = 1, k = 0; _txt[i] != 0; i++)
+	text = (char*)calloc(WIDTH*HEIGHT,sizeof(char));
+
+	//int i = 0, k = 0, l = 0;
+	for(int i = 0, k = 0; _txt[i] != 0; i++)
 	{
 		if(_txt[i] == ' ')
 		{
+			int j = 1;
 			while(!(_txt[i + j] == ' ' || _txt[i+j] == 0))
 			{
 				j++;
 			}
 			//if (txt[i+j] == 0) break;
-			if((i + j + k)/(1+floor((i+k)/WIDTH)) > WIDTH)
+			if(((i + k) % WIDTH) + j > WIDTH)
 			{
 				while((i + k) % WIDTH != 0)
 				{
 					text[i+k] = ' ';
+					textLength++;
 					k++;
-				}
+					/*
+					while((i + k) % WIDTH != 0)
+					{
+						text[i+k] = ' ';
+						textLength++;
+						k++;
+					}
+					*/
 				
+				}
+				k--;
+				textLength--;
 			}
-			j = 1;
+			
+			//j = 1;
 		}
 
 		text[i+k] = _txt[i];
-		if ((i + k) % WIDTH == 0 && _txt[i] == ' ') k--;
+		textLength++;
+		//if ((i + k) % WIDTH == 0 && _txt[i] == ' ') k--;
 
 	}
 	letter = 0;
@@ -186,10 +204,14 @@ void dialogueStep(const long frame)
 	if(text == NULL) return;
 	if(frame % delay == 0)
 	{
-		if(strlen(text) - letter)
+		if(textLength > letter)
 		{
 			lockInput = 1;
-			((u16*)SCREEN_BASE_BLOCK(7))[letter + (POS_X - (int)floor(letter/WIDTH)*WIDTH) + (POS_Y + (int)floor(letter/WIDTH))*32] = (text[letter]== ' ' ? 0x7F : text[letter])-32;
+			while(text[letter] == ' ')
+			{
+				letter++;
+			}
+			((u16*)SCREEN_BASE_BLOCK(7))[(letter % WIDTH) + POS_X  + (POS_Y + (u16)floor(letter/WIDTH))*32] = (text[letter]== ' ' ? 0x7F : text[letter])-32;
 			//((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (int)floor(letter/sizeX))*32] = (text[letter]-32) | (2<<10);
 			//((u16*)SCREEN_BASE_BLOCK(8))[letter + (xPos - (int)floor(letter/sizeX)*sizeX) + (yPos + (int)floor(letter/sizeX))*32] += (1 << 12);
 			letter++;
