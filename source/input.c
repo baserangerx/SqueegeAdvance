@@ -73,34 +73,29 @@ void combatInput(const u16 downKeys)
 
 void optionInput(const u16 downKeys)
 {
-    static u8* selected;
-    if (selected == NULL)
-    {
-        selected = calloc(1,sizeof(u8));
-    }
+    static u8 selected = 0;
     if(downKeys & KEY_B)
     {
-        //*selected = 0;
+        selected = 0;
         showItemOptions(0);
         mode = COMBAT_MODE;
-        free(selected);
         return;
     }
     if(downKeys & KEY_A)
     {
-        if((*selected) == 0)
+        if((selected) == 0)
         {
             return;
         }
-        else if((*selected) == 1)
+        else if((selected) == 1)
         {
+            selected = 0;
             infoItem(&inventory[0]);
             mode = DIALOGUE_MODE;
-            free(selected);
             return;
         }
         
     }
-    if(downKeys & KEY_UP) updateOption((*selected) > 0 ? (--(*selected)) : ((*selected) = 1));
-    if(downKeys & KEY_DOWN) updateOption((*selected) < 1 ? (++(*selected)) : ((*selected) = 0));
+    if(downKeys & KEY_UP) updateOption((selected) > 0 ? (--(selected)) : ((selected) = 1));
+    if(downKeys & KEY_DOWN) updateOption((selected) < 1 ? (++(selected)) : ((selected) = 0));
 }
