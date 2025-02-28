@@ -85,6 +85,9 @@ void optionInput(const u16 downKeys)
     {
         if((selected) == 0)
         {
+            selected = 0;
+            useItem(&inventory[0]);
+            mode = DIALOGUE_MODE;
             return;
         }
         else if((selected) == 1)

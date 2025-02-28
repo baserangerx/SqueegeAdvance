@@ -22,19 +22,14 @@ void showItemOptions(bool _true)
         drawClear(POS_X,POS_Y,WIDTH,HEIGHT);
     }
 }
-
-void useItem()
-{
-
-}
-
 //const item* _item
 void infoItem(item* _item)
 {
     showItemOptions(0);
     showPageIcons(0);
     loadDialogueBox();
-    dialogueWrite(1,12,_item->name);
+    //drawBox(1,11,16,1);
+    dialogueWrite(0,12,_item->name);
     dialoguePrint(_item->description, 1);
 }
 

@@ -5,6 +5,7 @@
 
 void showItemOptions(bool);
 //void clearItemOptions();
+void useItem(item*);
 void infoItem(item*);
 void updateOption(const u8);
 //void selected(const u8);

@@ -9,6 +9,7 @@
 #include "items.h"
 #include "input.h"
 #include "draw.h"
+#include "stdarg.h"
 
 
 char* text;
@@ -129,8 +130,6 @@ void loadPage(u16 page)
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+3) + (POS_Y-1)*32] = 99;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+4) + (POS_Y-1)*32] = 99;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+5) + (POS_Y-1)*32] = 100;
-			item apple = createItem("apple", "I am apple");
-			addItem(&apple);
 			for(int i = 0; i < 6; i++)
 			{
 				dialogueWrite(POS_X + (i%2)*WIDTH/2, POS_Y + floor(i/2)*2, "- ");
