@@ -58,7 +58,7 @@ int main(void)
 
     loadText();
     //dialoguePrint("Idk the font seems really big compared to the screen. Like this probably takes up four lines! (i gotta test more lines!)", 2);
-	dialoguePrint("Zeebzeebzeeb zeeb zeeb Zebb!! Ze!be beez z330xz sweeb blebelebelebve blebebebe",2);
+	dialoguePrint("Zeebzeebzeeb zeeb zeeb Zebbl !! Ze!be beez z330xz sweeb blebelebelebve blebebebe",2);
 
 	//dB.Print("Holiday my horses! what the fwip dude thets pwetty cwazy my guy :}");
 	//dB.Print("Once I was seven years old and I ate a large bird!!!");
@@ -71,7 +71,7 @@ int main(void)
     //dB.Print("I am squeege, the lone deciple of YoRe!                             Prepare thyself!");
 
     //dB.Print("Check out all my wires")
-    item apple = newItem("apple", 2, "yummy apple",5);
+    item apple = newItem("apple", 2, "yummy apple",145);
     addItem(&apple);
 
     oamBuffer[0].Y = 5*8; 

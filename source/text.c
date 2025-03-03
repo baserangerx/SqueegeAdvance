@@ -149,16 +149,47 @@ void loadPage(u16 page)
 	};
 }
 
-void dialoguePrint(const char* _txt, const u16 _delay)
+void dialoguePrint(const char* _txt, const u16 _delay, ...)
 {
+	va_list arg_ptr;
+	va_start (arg_ptr, _delay);
+
 	dialogueClear();
 	textLength = 0;
 	delay = _delay;
 	text = (char*)calloc(WIDTH*HEIGHT,sizeof(char));
 
 	//int i = 0, k = 0, l = 0;
-	for(int i = 0, k = 0; _txt[i] != 0; i++)
+	for(int i = 0, k = 0; _txt[i] != '\0'; i++, k++)
 	{
+		if(_txt[i] == '%')
+		{
+			i++;
+			//k--;
+			
+			switch(_txt[i])
+			{
+				case 'd': {
+					int value = va_arg(arg_ptr, int);
+					int div;
+					for (div = 1; div <= value; div*=10);
+					do
+					{
+						div/=10;
+						text[k++] = value/div + 48;
+						//textLength++;
+						value%=div;
+					} while (value);
+					i++;
+					//k--;
+					break;
+				}
+				case 's': {
+					//k++;
+					break;
+				}
+			}
+		}
 		if(_txt[i] == ' ')
 		{
 			int j = 1;
@@ -167,13 +198,13 @@ void dialoguePrint(const char* _txt, const u16 _delay)
 				j++;
 			}
 			//if (txt[i+j] == 0) break;
-			if(((i + k) % WIDTH) + j > WIDTH)
+			if(((k) % WIDTH) + j > WIDTH)
 			{
-				while((i + k) % WIDTH != 0)
+				while((k) % WIDTH != 0)
 				{
-					text[i+k] = ' ';
-					textLength++;
-					k++;
+					text[k++] = ' ';
+					//textLength++;
+					//k++;
 					/*
 					while((i + k) % WIDTH != 0)
 					{
@@ -184,15 +215,20 @@ void dialoguePrint(const char* _txt, const u16 _delay)
 					*/
 				
 				}
-				k--;
-				textLength--;
+				i++;
+				//k--;
+				//textLength--;
 			}
 			
 			//j = 1;
 		}
+		else
+		{
+			//k++;
+		}
 
-		text[i+k] = _txt[i];
-		textLength++;
+		text[k] = _txt[i];
+		textLength = k+1;
 		//if ((i + k) % WIDTH == 0 && _txt[i] == ' ') k--;
 
 	}
