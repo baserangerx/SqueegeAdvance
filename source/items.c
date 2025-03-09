@@ -38,6 +38,6 @@ void useItem(item* _item)
         showItemOptions(0);
         showPageIcons(0);
         loadDialogueBox();
-        dialoguePrint("it tastes like circles. You regained %d hp!!! wiksmmdn ajnnjdn eee",1, _item->value);
+        dialoguePrint("it tastes like circles. You regained %i hp!!! wiksmmd n ajnnjdn eee",1, _item->value);
     }
 }

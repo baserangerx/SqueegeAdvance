@@ -169,7 +169,7 @@ void dialoguePrint(const char* _txt, const u16 _delay, ...)
 			
 			switch(_txt[i])
 			{
-				case 'd': {
+				case 'i': {
 					int value = va_arg(arg_ptr, int);
 					int div;
 					for (div = 1; div <= value; div*=10);
@@ -198,7 +198,7 @@ void dialoguePrint(const char* _txt, const u16 _delay, ...)
 				j++;
 			}
 			//if (txt[i+j] == 0) break;
-			if(((k) % WIDTH) + j > WIDTH)
+			if(((k-1) % WIDTH) + j > WIDTH)
 			{
 				while((k) % WIDTH != 0)
 				{
@@ -216,7 +216,6 @@ void dialoguePrint(const char* _txt, const u16 _delay, ...)
 				
 				}
 				i++;
-				//k--;
 				//textLength--;
 			}
 			
