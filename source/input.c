@@ -4,9 +4,14 @@
 #include "action_options.h"
 #include <gba_input.h>
 #include <stdlib.h>
+#include "player.h"
 
 bool lockInput;
 int page = 0;
+int availableSelections = 0;
+u8 selected = 0;
+u8 pageLock;
+
 enum InputMode
 {
     DIALOGUE_MODE,
@@ -47,7 +52,7 @@ void updateInput()
 
 void combatInput(const u16 downKeys)
 {
-    static u8 selected = 0;
+    //static u8 selected = 0;
 
     if (downKeys & KEY_R)
     {
@@ -59,11 +64,16 @@ void combatInput(const u16 downKeys)
         selected = 0;
         loadPage(page>0 ? --page : (page=3));
     }
-    if(downKeys & KEY_RIGHT) updateSelection(selected < 5 ? (++selected) : (selected = 0));
-    if(downKeys & KEY_LEFT) updateSelection(selected > 0 ? (--selected) : (selected = 5));
-    if(downKeys & KEY_UP) updateSelection(selected > 1 ? (selected -= 2) : (selected += 4));
-    if(downKeys & KEY_DOWN) updateSelection(selected < 4 ? (selected += 2) : (selected -= 4));
-    if(downKeys & KEY_A && page == 2)
+    if(downKeys & KEY_RIGHT) updateSelection(selected < availableSelections ? (++selected) : (selected = 0));
+    if(downKeys & KEY_LEFT) updateSelection(selected > 0 ? (--selected) : (selected = availableSelections));
+    if(downKeys & KEY_UP) updateSelection(selected = (selected - 2) % (availableSelections+1));
+    if(downKeys & KEY_DOWN) updateSelection(selected = (selected + 2) % (availableSelections+1));
+
+    if(downKeys & KEY_A && page == 0)
+    {
+        pageLock = 1;
+    }
+    if((downKeys & KEY_A && page == 2) && (selected < itemCount))
     {
         //selected = 0;
         mode = OPTION_MODE;
@@ -71,34 +81,34 @@ void combatInput(const u16 downKeys)
     }
 }
 
-void optionInput(const u16 downKeys)
+void optionInput(const u16 _downKeys)
 {
-    static u8 selected = 0;
-    if(downKeys & KEY_B)
+    static u8 _selected = 0;
+    if(_downKeys & KEY_B)
     {
-        selected = 0;
+        _selected = 0;
         showItemOptions(0);
         mode = COMBAT_MODE;
         return;
     }
-    if(downKeys & KEY_A)
+    if(_downKeys & KEY_A)
     {
-        if((selected) == 0)
+        if((_selected) == 0)
         {
-            selected = 0;
-            useItem(&inventory[0]);
+            _selected = 0;
+            useItem(&inventory[selected]);
             mode = DIALOGUE_MODE;
             return;
         }
-        else if((selected) == 1)
+        else if((_selected) == 1)
         {
-            selected = 0;
-            infoItem(&inventory[0]);
+            _selected = 0;
+            infoItem(&inventory[selected]);
             mode = DIALOGUE_MODE;
             return;
         }
         
     }
-    if(downKeys & KEY_UP) updateOption((selected) > 0 ? (--(selected)) : ((selected) = 1));
-    if(downKeys & KEY_DOWN) updateOption((selected) < 1 ? (++(selected)) : ((selected) = 0));
+    if(_downKeys & KEY_UP) updateOption((_selected) > 0 ? (--(_selected)) : ((_selected) = 1));
+    if(_downKeys & KEY_DOWN) updateOption((_selected) < 1 ? (++(_selected)) : ((_selected) = 0));
 }

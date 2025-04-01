@@ -38,3 +38,8 @@ void updateOption(const u8 _selected)
     drawColour(POS_X, POS_Y, WIDTH, HEIGHT, 0);
     drawColour(POS_X, POS_Y+_selected, WIDTH, 1, 1);
 }
+
+void selectTarget()
+{
+    
+}

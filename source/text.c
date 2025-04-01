@@ -10,6 +10,7 @@
 #include "input.h"
 #include "draw.h"
 #include "stdarg.h"
+#include "player.h"
 
 
 char* text;
@@ -110,6 +111,14 @@ void loadPage(u16 page)
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X-1) + (POS_Y-1)*32] = 98;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X) + (POS_Y-1)*32] = 99;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+1) + (POS_Y-1)*32] = 100;
+
+			for(int i = 0; i < 1; i++)
+			{
+				dialogueWrite(POS_X + (i%2)*WIDTH/2, POS_Y + floor(i/2)*2, "- ");
+				dialogueWrite(POS_X + (i%2)*WIDTH/2 + 2, POS_Y + floor(i/2)*2, "Attack");
+				availableSelections = i;
+			}
+
 			break;
 		case 1:
 			*((vu16*)0x500000E) = *((vu16*)0x5000008);
@@ -130,10 +139,11 @@ void loadPage(u16 page)
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+3) + (POS_Y-1)*32] = 99;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+4) + (POS_Y-1)*32] = 99;
 			((u16*)SCREEN_BASE_BLOCK(7))[(POS_X+5) + (POS_Y-1)*32] = 100;
-			for(int i = 0; i < 6; i++)
+			for(int i = 0; i < 6 && inventory[i].name != NULL; i++)
 			{
 				dialogueWrite(POS_X + (i%2)*WIDTH/2, POS_Y + floor(i/2)*2, "- ");
 				dialogueWrite(POS_X + (i%2)*WIDTH/2 + 2, POS_Y + floor(i/2)*2, inventory[i].name != NULL ? inventory[i].name : "");
+				availableSelections = i;
 			}
 			break;
 		case 3:
@@ -152,7 +162,7 @@ void loadPage(u16 page)
 void dialoguePrint(const char* _txt, const u16 _delay, ...)
 {
 	va_list arg_ptr;
-	va_start (arg_ptr, _delay);
+	va_start(arg_ptr, _delay);
 
 	dialogueClear();
 	textLength = 0;
@@ -186,6 +196,14 @@ void dialoguePrint(const char* _txt, const u16 _delay, ...)
 				}
 				case 's': {
 					//k++;
+					char* value = va_arg(arg_ptr, char*);
+					//text[k++] = *value;
+					while(*value != '\0')
+					{
+						text[k++] = *(value++);
+					}
+					
+					i++;
 					break;
 				}
 			}
@@ -198,7 +216,7 @@ void dialoguePrint(const char* _txt, const u16 _delay, ...)
 				j++;
 			}
 			//if (txt[i+j] == 0) break;
-			if(((k-1) % WIDTH) + j > WIDTH)
+			if(((k-1) % WIDTH) + 1 + j > WIDTH)
 			{
 				while((k) % WIDTH != 0)
 				{

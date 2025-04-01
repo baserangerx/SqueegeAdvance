@@ -71,8 +71,9 @@ int main(void)
     //dB.Print("I am squeege, the lone deciple of YoRe!                             Prepare thyself!");
 
     //dB.Print("Check out all my wires")
-    item apple = newItem("apple", 2, "yummy apple",145);
-    addItem(&apple);
+    //item apple = newItem("Apple", 2, "Restore 145hp upon use. You've heard there are only two apples, the rest are man-made.",145);
+    addItem((item){"Apple", "Restore 145hp upon use. You've heard there are only two apples, the rest are man-made.", CONSUMABLE,145, 0});
+    addItem((item){"Pear", "Restore 541 hp upon use. Like an apple if it was really weird", CONSUMABLE, 541, 0});
 
     oamBuffer[0].Y = 5*8; 
     oamBuffer[0].Shape = 0;  // Y=80, square sprite
